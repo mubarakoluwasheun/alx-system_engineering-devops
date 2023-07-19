@@ -1,2 +1,2 @@
 #!/bin/bash
-ls -a1 | grep -vE '^\.{1,2}$' | sort -d | awk '{printf "%s%s", ($0~/\/$/)?$0:",":$0} END{print ""}'
+ls -map
