@@ -15,8 +15,8 @@ if [ "$#" -lt 3]; then
 fi
 
 if [ "$#" -eq 3]; then
-        scp -o "$HOST_KEY_RULE" "PATH_TO_FILE" "${USERNAME}@${IP}:~/"
+        scp -o "$HOST_KEY_RULE" "$PATH_TO_FILE" "${USERNAME}@${IP}:~/"
         exit 0;
 fi
 
-scp -o "$HOST_KEY_RULE" -i "PATH_TO_SSH_KEY" "$PATH_TO_FILE" "${USERNAME}@${IP}:~/";
+scp -o "$HOST_KEY_RULE" -i "$PATH_TO_SSH_KEY" "$PATH_TO_FILE" "${USERNAME}@${IP}:~/";
