@@ -1,31 +1,19 @@
 #!/usr/bin/env bash
-# Perform nginx server install and configuration
+# Script that configures Nginx server with a custom header
 
-apt-get update
-apt-get install -y nginx
+# Update package list and install Nginx
+apt-get -y update
+apt-get -y install nginx
 
-mkdir -p /var/www/html
-touch /var/www/html/index.html
-echo "Hello World!" > /var/www/html/index.html
-touch /var/www/html/404.html
-echo "Ceci n'est pas une page" > /var/www/html/404.html
+# Create a custom 404 page
+echo "Ceci n'est pas une page" > /usr/share/nginx/html/custom_404.html
 
-printf %s "server {
-    listen 80 default_server;
-    listen [::]:80 default_server;
-    add_header X-Served-By $HOSTNAME;
-    root   /var/www/html;
-    index  index.html index.htm;
+# Modify the default Nginx configuration to add a custom 404 page and redirect rule
+sed -i "s/server_name _;/server_name _;\n\trewrite ^\/redirect_me https:\/\/github.com\/Tolulope05 permanent;\n\n\terror_page 404 \/custom_404.html;\n\tlocation = \/custom_404.html {\n\t\troot \/usr\/share\/nginx\/html;\n\t\tinternal;\n\t}/" /etc/nginx/sites-available/default
 
-    location /redirect_me {
-        return 301 https://www.youtube.com/watch?v=EEZnkAgJA-Q;
-    }
+# Add the custom header to the Nginx configuration
+sed -i "/server_name _;/a \    add_header X-Served-By '$HOSTNAME';" /etc/nginx/sites-available/default
 
-    error_page 404 /404.html;
-    location /404 {
-      root /var/www/html;
-      internal;
-    }
-}" > /etc/nginx/sites-available/default
-
-service nginx restart
+# Start and reload Nginx to apply the changes
+service nginx start
+service nginx reload
