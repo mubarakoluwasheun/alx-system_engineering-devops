@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# install nginx web server and should listen on port 80
+# install nginx and configure it on a remote server
 
 apt-get -y update
 apt-get -y install nginx
